@@ -15422,10 +15422,15 @@ return nil."
 		      (t (org-with-limited-levels (org-back-to-heading t))))))
        (forward-line)
        (when (org-looking-at-p org-planning-line-re) (forward-line))
-       (cond ((looking-at org-property-drawer-re)
-	      (forward-line)
-	      (cons (point) (progn (goto-char (match-end 0))
-				   (line-beginning-position))))
+       (cond ((re-search-forward
+	       org-property-drawer-re
+	       (save-excursion (save-match-data (outline-next-heading))
+			       (point)) t)
+	      (progn
+		(goto-char (match-beginning 0))
+		(forward-line)
+		(cons (point) (progn (goto-char (match-end 0))
+						 (line-beginning-position)))))
 	     (force
 	      (goto-char beg)
 	      (org-insert-property-drawer)
