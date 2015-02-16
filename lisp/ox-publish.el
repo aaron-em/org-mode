@@ -471,7 +471,10 @@ matching the regexp SKIP-DIR when recursing through BASE-DIR."
   "Return a list of all files in PROJECT.
 If EXCLUDE-REGEXP is set, this will be used to filter out
 matching filenames."
-  (let* ((project-plist (cdr project))
+  (let* ((project-plist
+          (if (eq 'string (type-of (first project)))
+              (cdr project)
+            project))
 	 (base-dir (file-name-as-directory
 		    (plist-get project-plist :base-directory)))
 	 (include-list (plist-get project-plist :include))
